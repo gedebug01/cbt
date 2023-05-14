@@ -1,0 +1,23 @@
+{
+  "development": {
+    "username": "root",
+    "password": "root",
+    "database": "cbt-new",
+    "host": "localhost",
+    "dialect": "mysql"
+  },
+  "test": {
+    "username": "root",
+    "password": null,
+    "database": "database_test",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  },
+  "production": {
+    "username": "u1361524_exam-mi",
+    "password": "ITMIPesriku1",
+    "database": "u1361524_exam-mi",
+    "host": "127.0.0.1",
+    "dialect": "mysql"
+  }
+}

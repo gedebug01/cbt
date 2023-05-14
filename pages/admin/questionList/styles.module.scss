@@ -1,0 +1,12 @@
+.buttonContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.space {
+  width: 100%;
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: flex-end;
+}
