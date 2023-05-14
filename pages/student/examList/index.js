@@ -151,7 +151,9 @@ function ExamListPage() {
       if (data) {
         setTotalData(data.questions?.length ?? 10);
         const newData = data.questions?.map((el, i) => {
-          const isHaveResult = resultData ? resultData[i]?.result : false;
+          const isHaveResult = resultData
+            ? resultData[i]?.question_id === el.id
+            : false;
           return {
             key: i,
             question: el.name,
