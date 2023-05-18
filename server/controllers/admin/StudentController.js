@@ -19,6 +19,7 @@ class StudentController {
         status,
         nisn,
         nis,
+        is_login: false,
       });
 
       res.status(200).json({ message: 'berhasil menambahkan siswa' });
@@ -34,12 +35,47 @@ class StudentController {
           ...el,
           password: hashingPassword(el.password),
           id: uuid(),
+          is_login: false,
         };
       });
 
       await Student.bulkCreate(body);
 
       res.status(200).json({ message: 'berhasil menambahkan siswa' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async resetStudentLogin(req, res, next) {
+    try {
+      const id = req?.userAccessLogin?.id;
+      await Student.update(
+        {
+          is_login: false,
+        },
+        {
+          where: { id },
+        }
+      );
+      res.status(200).json({ message: 'berhasil mereset status login siswa' });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  static async adminResetStudentLogin(req, res, next) {
+    try {
+      const id = req?.body?.id;
+      await Student.update(
+        {
+          is_login: false,
+        },
+        {
+          where: { id },
+        }
+      );
+      res.status(200).json({ message: 'berhasil mereset status login siswa' });
     } catch (error) {
       next(error);
     }

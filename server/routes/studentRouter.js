@@ -1,7 +1,10 @@
 const controllers = require('../controllers');
 const apiPath = require('../../constant/apiPath');
 const express = require('express');
+const { authStudent } = require('../middlewares/auth');
 const router = express.Router();
+
+router.use(authStudent);
 
 router.get(
   apiPath.api.student.allQuestion,

@@ -25,10 +25,7 @@ class HttpService {
               this.removeAuthTokenHeader();
               removeLocalUserDetails();
               removeUserAuthToken();
-              window.open(
-                `${window.location.origin}/?ref=${window.location.pathname}`,
-                '_self'
-              );
+              window.open(`${window.location.origin}`, '_self');
             } else {
               this.authToken = tmp;
             }

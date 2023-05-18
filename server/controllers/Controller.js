@@ -6,6 +6,7 @@ const {
   Question,
   Class,
   Result,
+  sequelize,
 } = require('../models');
 const {
   comparePassword,
@@ -18,6 +19,7 @@ const { v4: uuid } = require('uuid');
 
 class Controller {
   static async login(req, res, next) {
+    const t = await sequelize.transaction();
     try {
       let user = '';
       const { username, password, role } = req.body;
@@ -40,6 +42,19 @@ class Controller {
             username,
           },
         });
+
+        if (user.is_login) {
+          throw new Error('Login authorize error');
+        } else {
+          await Student.update(
+            {
+              is_login: true,
+            },
+            {
+              where: { id: user.id },
+            }
+          );
+        }
       }
 
       if (!user) {
@@ -57,12 +72,14 @@ class Controller {
       };
 
       const token = signToken(payload);
+      await t.commit();
       res.status(200).json({
         message: 'User logged in successfully',
         role,
         token,
       });
     } catch (error) {
+      await t.rollback();
       next(error);
     }
   }

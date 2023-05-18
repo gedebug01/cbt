@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Modal, Button, notification, Space, Input } from 'antd';
+import { Modal, Button, notification, Space, Input, Badge } from 'antd';
 
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
+import {
+  EditOutlined,
+  DeleteOutlined,
+  LogoutOutlined,
+} from '@ant-design/icons';
 import { useDispatch } from 'react-redux';
 
 import { CustomTable } from '@/components';
@@ -10,6 +14,7 @@ import {
   editStudent,
   getAllStudent,
   deleteStudent as deleteStudentAction,
+  adminResetStudentLogin,
 } from '@/store/actions';
 
 import styles from './styles.module.scss';
@@ -46,12 +51,37 @@ export default function StudentList() {
       });
     }
   };
+  const resetLogin = async (id) => {
+    const { data } = await dispatch(adminResetStudentLogin({ id }));
+    if (data) {
+      setSearch('');
+      fetchData();
+      api.success({
+        description: data.message,
+        placement: 'topRight',
+      });
+    } else {
+      api.error({
+        description: 'Gagal mereset status login siswa. Coba lagi',
+        placement: 'topRight',
+      });
+    }
+  };
 
   const deleteClassModal = (id) => {
     Modal.warning({
       title: 'Apakah anda yakin?',
       content: 'Data yang anda hapus tidak dapat di kembalikan lagi',
       onOk: () => deleteStudent(id),
+      onCancel: () => {},
+      okCancel: true,
+    });
+  };
+  const resetLoginModal = (id) => {
+    Modal.warning({
+      title: 'Apakah anda yakin?',
+      content: 'Status login siswa akan di reset',
+      onOk: () => resetLogin(id),
       onCancel: () => {},
       okCancel: true,
     });
@@ -121,7 +151,12 @@ export default function StudentList() {
       const newData = data.data?.map((el, i) => {
         return {
           key: i,
-          fullName: el.full_name,
+          fullName: (
+            <Space>
+              <p>{el.full_name}</p>
+              <Badge color={el.is_login ? 'green' : 'red'} />
+            </Space>
+          ),
           className: `${el.Class.grade} ${el.Class.name}`,
           userName: el.username,
           nisn: el.nisn,
@@ -153,6 +188,15 @@ export default function StudentList() {
                 }}
               >
                 <DeleteOutlined />
+              </Button>
+              <Button
+                style={{ background: '#FA9884' }}
+                type="primary"
+                onClick={() => {
+                  resetLoginModal(el.id);
+                }}
+              >
+                <LogoutOutlined />
               </Button>
             </div>
           ),

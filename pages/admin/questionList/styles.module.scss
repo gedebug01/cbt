@@ -10,3 +10,12 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.wrapText {
+  overflow-wrap: break-word;
+  max-width: 100px;
+}
+
+.ansWrap {
+  max-width: 100px;
+}

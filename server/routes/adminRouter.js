@@ -9,8 +9,17 @@ router.get(
   apiPath.api.admin.allClass,
   controllers.admin.ClassControler.getListClass
 );
+router.patch(
+  apiPath.api.admin.resetStudentLogin,
+  controllers.admin.StudentController.resetStudentLogin
+);
 
 router.use(authAdmin);
+
+router.patch(
+  apiPath.api.admin.adminResetStudentLogin,
+  controllers.admin.StudentController.adminResetStudentLogin
+);
 
 router.post(
   apiPath.api.admin.addClass,

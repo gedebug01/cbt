@@ -147,24 +147,31 @@ function ExamListPage() {
       const { class_id, status } = student;
       const { data } = await dispatch(studentGetAllQuestion(class_id));
       const { data: resultData } = await dispatch(getResult());
+
+      const questions = [];
+      data?.questions?.forEach((item) => {
+        let resultTemplate = { ...item };
+        resultData.forEach((res) => {
+          if (res?.question_id === item?.id) {
+            resultTemplate.result = +res.result;
+            resultTemplate.question_id = res.question_id;
+          }
+        });
+        questions.push(resultTemplate);
+      });
+
       setStudentStatus(status);
       if (data) {
         setTotalData(data.questions?.length ?? 10);
-        const newData = data.questions?.map((el, i) => {
-          const isHaveResult = resultData
-            ? resultData[i]?.question_id === el.id
-            : false;
+        const newData = questions?.map((el, i) => {
           return {
             key: i,
             question: el.name,
             action: (
               <div className={styles.buttonContainer}>
-                {resultData?.some((e) => e?.Question?.id === el.id) &&
-                isHaveResult ? (
-                  <Tag color={resultData[i]?.result < 50 ? 'error' : 'green'}>
-                    <p style={{ fontWeight: 500 }}>
-                      Hasil: {resultData[i]?.result}
-                    </p>
+                {el?.result || el?.result == 0 ? (
+                  <Tag color={el?.result < 50 ? 'error' : 'green'}>
+                    <p style={{ fontWeight: 500 }}>Hasil: {el?.result}</p>
                   </Tag>
                 ) : (
                   <Button

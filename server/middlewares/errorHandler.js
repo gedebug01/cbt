@@ -24,6 +24,12 @@ function errorHandler(err, req, res, next) {
   } else if (err.message === 'Invalid email or password') {
     code = 400;
     msg = 'Invalid email or password';
+  } else if (err.message === 'Login authorize error') {
+    code = 403;
+    msg = 'Akun telah login, silahkan keluar dari perangkat lainnya';
+  } else if (err.message === 'Session Expired') {
+    code = 403;
+    msg = 'Session Expired';
   }
   res.status(code).send(msg);
 }

@@ -51,10 +51,16 @@ const authAdmin = async (req, res, next) => {
 };
 const authStudent = async (req, res, next) => {
   try {
-    const { role } = req.userAccessLogin;
+    const { role, id } = req.userAccessLogin;
+    let userLoginData;
 
     if (role !== 'student') {
       throw new Error('Not Authorized');
+    }
+    userLoginData = await Student.findByPk(id);
+
+    if (!userLoginData.is_login) {
+      throw new Error('Session Expired');
     }
 
     next();

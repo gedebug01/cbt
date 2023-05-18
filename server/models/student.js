@@ -79,6 +79,7 @@ module.exports = (sequelize, DataTypes) => {
           },
         },
       },
+      is_login: DataTypes.BOOLEAN,
     },
     {
       sequelize,

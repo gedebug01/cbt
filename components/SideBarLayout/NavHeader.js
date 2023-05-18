@@ -2,12 +2,15 @@ import React, { useEffect, useState, useRef } from 'react';
 import { Layout, Avatar, theme, Popover, Button } from 'antd';
 import { UserOutlined, LogoutOutlined } from '@ant-design/icons';
 
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import style from './styles.module.scss';
 import { useRouter } from 'next/router';
+import { resetStudentLogin } from '@/store/actions';
 
 export default function NavHeader({ barTitle }) {
+  const dispatch = useDispatch();
+  const { role } = useSelector(({ common }) => common);
   const { Header } = Layout;
   const [showMenu, setShowMenu] = useState(false);
   const {
@@ -18,17 +21,23 @@ export default function NavHeader({ barTitle }) {
 
   const clickRef = useRef();
 
+  const doLogOut = async () => {
+    if (role === 'student') {
+      const { error } = await dispatch(resetStudentLogin());
+      if (!error) {
+        localStorage.clear();
+        router.push('/');
+      }
+    } else {
+      localStorage.clear();
+      router.push('/');
+    }
+  };
+
   const content = (
     <div className={style.popoverItem}>
       <div className={style.headerItemList}>
-        <Button
-          danger
-          type="text"
-          onClick={() => {
-            localStorage.clear();
-            router.push('/');
-          }}
-        >
+        <Button danger type="text" onClick={doLogOut}>
           <LogoutOutlined />
           <p>Log Out</p>
         </Button>

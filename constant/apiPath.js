@@ -21,6 +21,8 @@ const apiPath = {
     allStudent: '/admin/all-student',
     editStudent: '/admin/edit-student',
     deleteStudent: '/admin/delete-student',
+    resetStudentLogin: '/admin/reset-student-login',
+    adminResetStudentLogin: '/admin/admin-reset-student-login',
 
     addTeacher: '/admin/add-teacher',
     bulkAddTeacher: '/admin/bulk-add-teacher',
@@ -70,6 +72,8 @@ const apiPath = {
       allStudent: '/all-student',
       editStudent: '/edit-student/:id',
       deleteStudent: '/delete-student/:id',
+      resetStudentLogin: '/reset-student-login',
+      adminResetStudentLogin: '/admin-reset-student-login',
 
       addTeacher: '/add-teacher',
       bulkAddTeacher: '/bulk-add-teacher',

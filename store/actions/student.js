@@ -1,4 +1,5 @@
 import api from '@/api';
+import http from '@/api/http';
 import actionTypes from '@/constant/actionTypes';
 
 export const getStudentProfile = () => {
@@ -9,7 +10,6 @@ export const getStudentProfile = () => {
     });
     try {
       const { data, status } = await api.student.getStudentProfile();
-
       if (status === 200) {
         dispatch({
           type: actionTypes.IS_ERROR,
@@ -28,6 +28,9 @@ export const getStudentProfile = () => {
         type: actionTypes.IS_ERROR,
         payload: error.message,
       });
+      if (error?.response?.data === 'Session Expired') {
+        if (typeof window !== undefined) localStorage.clear();
+      }
       return { error: error.message };
     } finally {
       dispatch({
@@ -65,6 +68,9 @@ export const studentGetAllQuestion = (id) => {
         type: actionTypes.IS_ERROR,
         payload: error.message,
       });
+      if (error?.response?.data === 'Session Expired') {
+        if (typeof window !== undefined) localStorage.clear();
+      }
       return { error: error.message };
     } finally {
       dispatch({
@@ -102,6 +108,9 @@ export const getOneQuestion = ({ question_id }) => {
         type: actionTypes.IS_ERROR,
         payload: error.message,
       });
+      if (error?.response?.data === 'Session Expired') {
+        if (typeof window !== undefined) localStorage.clear();
+      }
       return { error: error.message };
     } finally {
       dispatch({
@@ -139,6 +148,9 @@ export const getOneToken = (secret_token) => {
         type: actionTypes.IS_ERROR,
         payload: error.message,
       });
+      if (error?.response?.data === 'Session Expired') {
+        if (typeof window !== undefined) localStorage.clear();
+      }
       return { error: error.message };
     } finally {
       dispatch({
@@ -176,6 +188,9 @@ export const initResult = (payload) => {
         type: actionTypes.IS_ERROR,
         payload: error.message,
       });
+      if (error?.response?.data === 'Session Expired') {
+        if (typeof window !== undefined) localStorage.clear();
+      }
       return { error: error.message };
     } finally {
       dispatch({
@@ -213,6 +228,9 @@ export const collectResult = (id, payload) => {
         type: actionTypes.IS_ERROR,
         payload: error.message,
       });
+      if (error?.response?.data === 'Session Expired') {
+        if (typeof window !== undefined) localStorage.clear();
+      }
       return { error: error.message };
     } finally {
       dispatch({
@@ -249,6 +267,9 @@ export const getResult = () => {
         type: actionTypes.IS_ERROR,
         payload: error.message,
       });
+      if (error?.response?.data === 'Session Expired') {
+        if (typeof window !== undefined) localStorage.clear();
+      }
       return { error: error.message };
     } finally {
       dispatch({

@@ -68,6 +68,9 @@ export default {
     deleteClass: (id) => http.delete(apiPath.admin.deleteClass + '/' + id),
 
     // * ========= student ============
+    adminResetStudentLogin: (id) =>
+      http.patch(apiPath.admin.adminResetStudentLogin, id),
+    resetStudentLogin: () => http.patch(apiPath.admin.resetStudentLogin),
     addStudent: (payload) => http.post(apiPath.admin.addStudent, payload),
     bulkAddStudent: (payload) =>
       http.post(apiPath.admin.bulkAddStudent, payload),
