@@ -952,7 +952,7 @@ export default function QuestionList() {
         nis: el.Student.nis,
         nisn: el.Student.nisn,
         name: el.Student.full_name,
-        result: el.result,
+        result: parseFloat(el.result).toFixed(2),
         answer: (
           <div className={styles.wrapText}>
             <p style={{ letterSpacing: 4 }}>
@@ -962,7 +962,7 @@ export default function QuestionList() {
         ),
         answerAnalysis: (
           <div className={styles.ansWrap}>
-            <Row>
+            <Row gutter={[4, 2]}>
               {ansArr.map((el, i) => (
                 <Col>
                   <React.Fragment key={i}>{el}</React.Fragment>

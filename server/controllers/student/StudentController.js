@@ -99,7 +99,7 @@ class StudentController {
       let result = 0;
 
       for (let i = 0; i < questionAnswer.length; i++) {
-        if (questionAnswer[i] === answer[i]) {
+        if (questionAnswer[i].toLowerCase() === answer[i].toLowerCase()) {
           correct++;
         }
       }

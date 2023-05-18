@@ -171,7 +171,9 @@ function ExamListPage() {
               <div className={styles.buttonContainer}>
                 {el?.result || el?.result == 0 ? (
                   <Tag color={el?.result < 50 ? 'error' : 'green'}>
-                    <p style={{ fontWeight: 500 }}>Hasil: {el?.result}</p>
+                    <p style={{ fontWeight: 500 }}>
+                      Hasil: {parseFloat(el?.result).toFixed(2)}
+                    </p>
                   </Tag>
                 ) : (
                   <Button
