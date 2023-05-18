@@ -32,6 +32,7 @@
     "react-iframe": "^1.8.5",
     "react-pdf": "^6.2.2",
     "react-redux": "^8.0.5",
+    "react-timer-hook": "^3.0.6",
     "redux": "^4.2.1",
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.4.2",

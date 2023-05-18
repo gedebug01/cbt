@@ -939,7 +939,7 @@ export default function QuestionList() {
       const studentAnswer = el.answer;
       const keyAnswer = data?.question?.answer;
       for (let i = 0; i < studentAnswer?.length; i++) {
-        if (studentAnswer[i] === keyAnswer[i]) {
+        if (studentAnswer[i]?.toLowerCase() === keyAnswer[i]?.toLowerCase()) {
           ansArr.push(<p>{studentAnswer[i].toUpperCase()}</p>);
         } else {
           ansArr.push(

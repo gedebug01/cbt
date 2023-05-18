@@ -1,14 +1,7 @@
 import { Space, Tag } from 'antd';
 import { useEffect, useMemo, useState } from 'react';
 
-import {
-  CheckCircleOutlined,
-  ClockCircleOutlined,
-  CloseCircleOutlined,
-  ExclamationCircleOutlined,
-  MinusCircleOutlined,
-  SyncOutlined,
-} from '@ant-design/icons';
+import { ClockCircleOutlined } from '@ant-design/icons';
 
 import style from './styles.module.scss';
 import LS_KEYS from '@/constant/localStorage';
@@ -27,7 +20,7 @@ export const Timer = ({
   const parsedDeadline = useMemo(() => Date.parse(deadline), [deadline]);
   const [time, setTime] = useState(parsedDeadline - Date.now());
   const [onEnd, setOnEnd] = useState(false);
-
+  // console.log('tmeL ;');
   useEffect(() => {
     const interval = setInterval(
       () => setTime(parsedDeadline - Date.now()),
@@ -42,13 +35,19 @@ export const Timer = ({
       allowCollect(true);
     }
 
-    if (typeof window !== undefined) {
-      localStorage.setItem(
-        LS_KEYS.STUDENT_EXAM_DURATION,
-        Math.floor((time / MINUTE) % 60)
-      );
-    }
+    // if (typeof window !== undefined) {
+    //   localStorage.setItem(
+    //     LS_KEYS.STUDENT_EXAM_DURATION,
+    //     Math.floor((time / MINUTE) % 60)
+    //   );
+    // }
   }, [time]);
+
+  useEffect(() => {
+    if (onEnd) {
+      onFinish();
+    }
+  }, [onEnd]);
 
   return (
     <>
@@ -73,7 +72,6 @@ export const Timer = ({
               }).map(([label, value]) => {
                 if (label === 'Minutes') {
                   if (Math.floor(value) < 0) {
-                    onFinish();
                     setOnEnd((prevState) => !prevState);
                   }
                 }

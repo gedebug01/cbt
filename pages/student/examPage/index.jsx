@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useCallback } from 'react';
 import {
   Drawer,
   FloatButton,
@@ -21,13 +21,13 @@ import {
 import { useRouter } from 'next/router';
 import { useDispatch } from 'react-redux';
 import { FormOutlined } from '@ant-design/icons';
-import moment from 'moment';
+import moment, { duration } from 'moment';
 
 import { Timer } from '@/components/Timer';
 import LS_KEYS from '@/constant/localStorage';
 
 import style from './styles.module.scss';
-import { DefaultLayout } from '@/components';
+import { DefaultLayout, ExamContent, MyTimer } from '@/components';
 import { useLocalStorage } from '@/hooks/useLocalStorage';
 
 const { useBreakpoint } = Grid;
@@ -157,9 +157,9 @@ function NewExamPage({ isOld }) {
     }
   };
 
-  const toggleDrawer = () => {
+  const toggleDrawer = useCallback(() => {
     setOpen((prevState) => !prevState);
-  };
+  }, []);
 
   const hideModal = async () => {
     // resetClipBoard();
@@ -187,7 +187,7 @@ function NewExamPage({ isOld }) {
   };
   const setOldData = () => {
     if (typeof window !== undefined) {
-      const oldDuration = localStorage.getItem(LS_KEYS.STUDENT_EXAM_DURATION);
+      // const oldDuration = localStorage.getItem(LS_KEYS.STUDENT_EXAM_DURATION);
       const oldAnswer = localStorage.getItem(LS_KEYS.STUDENT_EXAM_ANSWER);
       // const oldQuestion = localStorage.getItem(LS_KEYS.STUDENT_EXAM_QUESTION);
       const oldTotalQuestion = localStorage.getItem(
@@ -202,7 +202,7 @@ function NewExamPage({ isOld }) {
       // );
       // const oldSsCount = localStorage.getItem(LS_KEYS.STUDENT_EXAM_SS_COUNT);
       setValue(JSON.parse(oldAnswer) ?? {});
-      setExamDuration(+oldDuration);
+      // setExamDuration(+oldDuration);
       // setQuestionLink(oldQuestion ?? '');
       setQustionTotal(JSON.parse(oldTotalQuestion));
       // setResultId(oldResultId);
@@ -251,7 +251,8 @@ function NewExamPage({ isOld }) {
 
       if (!allowCollect) {
         api.warning({
-          message: 'Anda belum mencukupi waktu minimal untuk mengumpulkan soal',
+          message:
+            'Kumpul jawaban minimal dibawah 15 menit sebelum waktu berakhir',
         });
         return;
       }
@@ -281,60 +282,12 @@ function NewExamPage({ isOld }) {
     router.push('/student/examList');
   };
 
-  const ExamContent = () => {
-    const onChange = (e, number) => {
-      const newValue = { ...value };
-      newValue[number] = e.target.value;
-      setValue(newValue);
-      if (typeof window !== undefined) {
-        localStorage.setItem(
-          LS_KEYS.STUDENT_EXAM_ANSWER,
-          JSON.stringify(newValue)
-        );
-      }
-    };
-
-    return (
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-        }}
-      >
-        {qustionTotal?.map((_, idx) => (
-          <React.Fragment key={idx}>
-            <Space direction="horizontal" style={{ marginBottom: 10 }}>
-              <p>{idx + 1}. </p>
-              <Radio.Group
-                onChange={(e) => onChange(e, idx + 1)}
-                value={value[idx + 1]}
-              >
-                <Radio value={'a'}>A</Radio>
-                <Radio value={'b'}>B</Radio>
-                <Radio value={'c'}>C</Radio>
-                <Radio value={'d'}>D</Radio>
-              </Radio.Group>
-            </Space>
-            <Divider
-              style={{
-                marginTop: 5,
-                marginBottom: 10,
-              }}
-            />
-          </React.Fragment>
-        ))}
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <Button
-            type="primary"
-            style={{ marginTop: 20 }}
-            onClick={() => onExamFinish(value)}
-          >
-            Kumpul
-          </Button>
-        </div>
-      </div>
-    );
-  };
+  const onChange = useCallback(
+    (value) => {
+      setValue(value);
+    },
+    [value]
+  );
 
   useEffect(() => {
     if (typeof window !== undefined) {
@@ -399,6 +352,11 @@ function NewExamPage({ isOld }) {
   //   }
   // }, [clipAlertCount, start]);
 
+  // const triggerFromAndroid = (data) => {
+  //   console.log('daTT: ', data);
+  //   alert(JSON.stringify(data));
+  // };
+
   useEffect(() => {
     if (studentBlur > 2) {
       setForceFinish(true);
@@ -408,12 +366,7 @@ function NewExamPage({ isOld }) {
     }
   }, [studentBlur]);
 
-  // const triggerFromAndroid = (data) => {
-  //   console.log('daTT: ', data);
-  //   alert(JSON.stringify(data));
-  // };
-
-  // colect result when user go out of exam
+  //! colect result when user go out of exam
   useEffect(() => {
     // window.addEventListener('focus', onFocus);
     window.addEventListener('blur', onBlur);
@@ -464,12 +417,20 @@ function NewExamPage({ isOld }) {
             }}
           >
             {start ? (
-              <Timer
-                isOld={isOld}
-                deadline={moment().add(examDuration, 'm').toDate()}
-                onFinish={() => setForceFinish(true)}
-                allowCollect={setAllowCollect}
-              />
+              <>
+                <MyTimer
+                  onFinish={() => setForceFinish(true)}
+                  duration={examDuration}
+                  isOld={isOld}
+                  allowCollect={setAllowCollect}
+                />
+                {/* <Timer
+                  isOld={isOld}
+                  deadline={moment().add(examDuration, 'm').toDate()}
+                  onFinish={() => setForceFinish(true)}
+                  allowCollect={setAllowCollect}
+                /> */}
+              </>
             ) : (
               <p>Loading...</p>
             )}
@@ -500,7 +461,13 @@ function NewExamPage({ isOld }) {
             </div>
             {open && md ? (
               <div className={style.answerContainer}>
-                <ExamContent />
+                <ExamContent
+                  value={value}
+                  isOld={isOld}
+                  onValueChange={onChange}
+                  onExamFinish={onExamFinish}
+                  qustionTotal={qustionTotal}
+                />
               </div>
             ) : null}
           </div>
@@ -619,7 +586,13 @@ function NewExamPage({ isOld }) {
           onClose={toggleDrawer}
           open={open}
         >
-          <ExamContent />
+          <ExamContent
+            value={value}
+            isOld={isOld}
+            onValueChange={onChange}
+            onExamFinish={onExamFinish}
+            qustionTotal={qustionTotal}
+          />
         </Drawer>
       ) : null}
     </DefaultLayout>
