@@ -10,11 +10,22 @@
   font-size: 50px;
   font-weight: 700;
 }
+.titleSm {
+  font-size: 25px;
+  font-weight: 700;
+}
 .cbt {
   @extend .title;
 }
+.cbtSm {
+  @extend .titleSm;
+}
 .mipesri {
   @extend .title;
+  color: #C07F00;
+}
+.mipesriSm {
+  @extend .titleSm;
   color: #C07F00;
 }
 
