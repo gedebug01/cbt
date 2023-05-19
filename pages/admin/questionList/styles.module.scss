@@ -13,9 +13,20 @@
 
 .wrapText {
   overflow-wrap: break-word;
-  max-width: 100px;
+  max-width: 200px;
+  :global {
+    .ant-tag {
+      margin: 0px;
+    }
+  }
 }
 
 .ansWrap {
-  max-width: 100px;
+  max-width: 200px;
+  
+  :global {
+    .ant-tag {
+      margin: 0px;
+    }
+  }
 }

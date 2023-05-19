@@ -940,10 +940,22 @@ export default function QuestionList() {
       const keyAnswer = data?.question?.answer;
       for (let i = 0; i < studentAnswer?.length; i++) {
         if (studentAnswer[i]?.toLowerCase() === keyAnswer[i]?.toLowerCase()) {
-          ansArr.push(<p>{studentAnswer[i].toUpperCase()}</p>);
+          ansArr.push(
+            <Tag color="green">
+              {i + 1}:{' '}
+              <Typography.Text strong style={{ fontSize: 12, color: 'green' }}>
+                {studentAnswer[i].toUpperCase()}
+              </Typography.Text>
+            </Tag>
+          );
         } else {
           ansArr.push(
-            <p style={{ color: 'red' }}>{studentAnswer[i].toUpperCase()}</p>
+            <Tag color="red">
+              {i + 1}:{' '}
+              <Typography.Text strong style={{ fontSize: 12, color: 'red' }}>
+                {studentAnswer[i].toUpperCase()}
+              </Typography.Text>
+            </Tag>
           );
         }
       }
@@ -955,14 +967,23 @@ export default function QuestionList() {
         result: parseFloat(el.result).toFixed(2),
         answer: (
           <div className={styles.wrapText}>
-            <p style={{ letterSpacing: 4 }}>
-              {data?.question?.answer.toUpperCase()}
-            </p>
+            <Row gutter={[1, 1]} justify="space-between">
+              {data?.question?.answer?.split('').map((el, i) => (
+                <Col>
+                  <Tag>
+                    {i + 1}:{' '}
+                    <Typography.Text strong style={{ fontSize: 12 }}>
+                      {el}
+                    </Typography.Text>
+                  </Tag>
+                </Col>
+              ))}
+            </Row>
           </div>
         ),
         answerAnalysis: (
           <div className={styles.ansWrap}>
-            <Row gutter={[4, 2]}>
+            <Row gutter={[1, 1]} justify="space-between">
               {ansArr.map((el, i) => (
                 <Col>
                   <React.Fragment key={i}>{el}</React.Fragment>
