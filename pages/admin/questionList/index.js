@@ -973,7 +973,7 @@ export default function QuestionList() {
                   <Tag>
                     {i + 1}:{' '}
                     <Typography.Text strong style={{ fontSize: 12 }}>
-                      {el}
+                      {el.toUpperCase()}
                     </Typography.Text>
                   </Tag>
                 </Col>
