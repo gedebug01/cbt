@@ -934,8 +934,8 @@ export default function QuestionList() {
     // };
     const { data } = await dispatch(getOneQuestion(id));
     setTotalAnswer(data?.question?.Results?.length ?? 10);
-    let ansArr = [];
     const newData = data?.question?.Results?.map((el, i) => {
+      let ansArr = [];
       const studentAnswer = el.answer;
       const keyAnswer = data?.question?.answer;
       for (let i = 0; i < studentAnswer?.length; i++) {
