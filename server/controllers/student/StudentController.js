@@ -93,29 +93,37 @@ class StudentController {
         },
         attributes: ['answer'],
       });
-      const questionAnswer = question.answer;
-
-      let correct = 0;
-      let result = 0;
-
-      for (let i = 0; i < questionAnswer.length; i++) {
-        if (questionAnswer[i].toLowerCase() === answer[i].toLowerCase()) {
-          correct++;
-        }
-      }
-      result = (correct / questionAnswer.length) * 100;
-
-      await Result.update(
-        {
-          end_time,
-          result,
-          answer,
-          leave_count,
+      const oldResult = await Result.findOne({
+        where: {
+          id,
         },
-        {
-          where: { id },
+      });
+
+      if (!oldResult.result) {
+        const questionAnswer = question.answer;
+
+        let correct = 0;
+        let result = 0;
+
+        for (let i = 0; i < questionAnswer.length; i++) {
+          if (questionAnswer[i].toLowerCase() === answer[i].toLowerCase()) {
+            correct++;
+          }
         }
-      );
+        result = (correct / questionAnswer.length) * 100;
+
+        await Result.update(
+          {
+            end_time,
+            result,
+            answer,
+            leave_count,
+          },
+          {
+            where: { id },
+          }
+        );
+      }
 
       await t.commit();
       res.status(200).json('Hasil dikumpulkan');
