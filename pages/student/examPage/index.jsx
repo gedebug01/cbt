@@ -63,6 +63,7 @@ function NewExamPage({ isOld }) {
   const [finishStatus, setfinishStatus] = useState(false);
   const [openAlert, setOpenAlert] = useState(false);
   const [studentBlurModal, setStudentBlurModal] = useState(false);
+  const [examEnd, setExamEnd] = useState(false);
   const [forceFinish, setForceFinish] = useState(false);
   // const [clipStatus, setClipStatus] = useState('');
   const [studentBlur, setStudentBlur] = useLocalStorage(
@@ -241,24 +242,27 @@ function NewExamPage({ isOld }) {
 
   const onExamFinish = async (value) => {
     let answer = '';
-    if (!forceFinish) {
-      if (Object.values(value).length !== qustionTotal?.length) {
-        api.warning({
-          message: 'Silahkan jawab seluruh soal terlebih dahulu',
-        });
-        return;
-      }
 
-      if (!allowCollect) {
-        api.warning({
-          message:
-            'Kumpul jawaban minimal dibawah 15 menit sebelum waktu berakhir',
-        });
-        return;
-      }
-    } else {
-      if (Object.values(value).length !== qustionTotal?.length) {
-        return;
+    if (!examEnd) {
+      if (!forceFinish) {
+        if (Object.values(value).length !== qustionTotal?.length) {
+          api.warning({
+            message: 'Silahkan jawab seluruh soal terlebih dahulu',
+          });
+          return;
+        }
+
+        if (!allowCollect) {
+          api.warning({
+            message:
+              'Kumpul jawaban minimal dibawah 15 menit sebelum waktu berakhir',
+          });
+          return;
+        }
+      } else {
+        if (Object.values(value).length !== qustionTotal?.length) {
+          return;
+        }
       }
     }
 
@@ -402,6 +406,12 @@ function NewExamPage({ isOld }) {
     }
   }, [forceFinish]);
 
+  useEffect(() => {
+    if (examEnd) {
+      onExamFinish(value);
+    }
+  }, [examEnd]);
+
   return (
     <DefaultLayout>
       {contextHolder}
@@ -419,7 +429,7 @@ function NewExamPage({ isOld }) {
             {start ? (
               <>
                 <MyTimer
-                  onFinish={() => setForceFinish(true)}
+                  onFinish={() => setExamEnd(true)}
                   duration={examDuration}
                   isOld={isOld}
                   allowCollect={setAllowCollect}
