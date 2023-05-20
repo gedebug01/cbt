@@ -58,6 +58,7 @@ function NewExamPage({ isOld }) {
   const [height, setHeight] = useState(600);
   const [start, setStart] = useState(false);
   const [loaded, setLoaded] = useState(false);
+  const [examLoading, setExamLoading] = useState(false);
   const [value, setValue] = useState({});
   const [allowCollect, setAllowCollect] = useState(false);
   const [finishStatus, setfinishStatus] = useState(false);
@@ -165,6 +166,7 @@ function NewExamPage({ isOld }) {
   const hideModal = async () => {
     // resetClipBoard();
     // window.ReactNativeWebView.postMessage({ exam: true });
+    setExamLoading(true);
     const { data: dataApi } = await dispatch(
       initResult({
         question_id: question_id.question_id,
@@ -177,12 +179,14 @@ function NewExamPage({ isOld }) {
       //   localStorage.setItem(LS_KEYS.STUDENT_EXAM_RESULT_ID, dataApi.id);
       // }
       setStart(true);
+      setExamLoading(false);
     } else {
       api.error({
         message: `Gagal`,
         description: 'Coba lagi',
         placement: 'topRight',
       });
+      setExamLoading(false);
       setOpen(false);
     }
   };
@@ -490,6 +494,7 @@ function NewExamPage({ isOld }) {
                 type="primary"
                 onClick={hideModal}
                 disabled={!loaded}
+                loading={examLoading}
               >
                 Mulai
               </Button>

@@ -100,11 +100,11 @@ export default function QuestionList() {
   };
 
   const columns = [
-    {
-      title: 'Link',
-      dataIndex: 'link',
-      key: 'link',
-    },
+    // {
+    //   title: 'Link',
+    //   dataIndex: 'link',
+    //   key: 'link',
+    // },
     {
       title: 'Kelas',
       dataIndex: 'class',
@@ -174,7 +174,7 @@ export default function QuestionList() {
         nis: el.Student.nis,
         nisn: el.Student.nisn,
         name: el.Student.full_name,
-        result: el.result,
+        result: parseFloat(el.result).toFixed(2),
         task: data?.question?.name,
       };
     });

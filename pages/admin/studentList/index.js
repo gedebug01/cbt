@@ -214,7 +214,7 @@ export default function StudentList() {
     <>
       {contextHolder}
       <Space size={20} className={styles.space}>
-        <Input.Search onSearch={(e) => setSearch(e)} />
+        <Input.Search placeholder="Cari siswa" onSearch={(e) => setSearch(e)} />
       </Space>
       <CustomTable
         pageSize={pageSize}
