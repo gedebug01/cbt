@@ -66,18 +66,29 @@ class StudentController {
   }
 
   static async initResult(req, res, next) {
+    const t = await sequelize.transaction();
     try {
       const { question_id, start_time } = req.body;
       const student_id = req?.userAccessLogin?.id;
-      const result = await Result.create({
-        id: uuid(),
-        question_id,
-        student_id,
-        start_time,
-        result: null,
+      const checkResult = await Result.findOne({
+        where: {
+          [Op.and]: [{ student_id }, { question_id }],
+        },
       });
-      res.status(200).json(result);
+      let result;
+      if (!checkResult) {
+        result = await Result.create({
+          id: uuid(),
+          question_id,
+          student_id,
+          start_time,
+          result: null,
+        });
+      }
+      await t.commit();
+      res.status(200).json(checkResult ?? result);
     } catch (error) {
+      await t.rollback();
       next(error);
     }
   }
