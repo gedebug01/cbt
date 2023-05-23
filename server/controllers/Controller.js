@@ -43,6 +43,15 @@ class Controller {
           },
         });
 
+        if (!user) {
+          throw new Error('Invalid email or password');
+        }
+        const passwordCheck = comparePassword(password, user.password);
+
+        if (!passwordCheck) {
+          throw new Error('Invalid email or password');
+        }
+
         if (user.is_login) {
           throw new Error('Login authorize error');
         } else {
@@ -52,18 +61,10 @@ class Controller {
             },
             {
               where: { id: user.id },
+              transaction: t,
             }
           );
         }
-      }
-
-      if (!user) {
-        throw new Error('Invalid email or password');
-      }
-      const passwordCheck = comparePassword(password, user.password);
-
-      if (!passwordCheck) {
-        throw new Error('Invalid email or password');
       }
 
       const payload = {

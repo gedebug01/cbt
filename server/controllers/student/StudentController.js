@@ -77,13 +77,16 @@ class StudentController {
       });
       let result;
       if (!checkResult) {
-        result = await Result.create({
-          id: uuid(),
-          question_id,
-          student_id,
-          start_time,
-          result: null,
-        });
+        result = await Result.create(
+          {
+            id: uuid(),
+            question_id,
+            student_id,
+            start_time,
+            result: null,
+          },
+          { transaction: t }
+        );
       }
       await t.commit();
       res.status(200).json(checkResult ?? result);
@@ -132,6 +135,7 @@ class StudentController {
           },
           {
             where: { id },
+            transaction: t,
           }
         );
       }
